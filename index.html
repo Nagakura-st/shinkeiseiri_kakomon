@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    /* ベース設定 */
+    * {
+        box-sizing: border-box; /* すべての要素のサイズ計算を固定 */
+    }
+    
     html, body {
-        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden; /* 強制的に横スクロールを禁止 */
+        -webkit-text-size-adjust: 100%; /* iPhoneで文字が勝手に小さくなるのを防ぐ */
     }
     body {
         font-family: "Helvetica Neue", Arial, sans-serif;
@@ -124,6 +131,7 @@
     .options-vertical { margin: 10px 0; padding-left: 20px; }
     .options-horizontal {
         display: flex; flex-wrap: wrap; gap: 15px;
+        max-width: 100%; box-sizing: border-box;
         margin-top: 10px; font-weight: bold;
         background-color: #eee; padding: 10px; border-radius: 4px;
     }
@@ -2437,5 +2445,6 @@
 
 </body>
 </html>
+
 
 

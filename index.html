@@ -132,6 +132,23 @@
         /* スマホでも邪魔なら以下で目次を非表示にすることも可能 */
         /* #toc-container { display: none; } */
     }
+    html, body {
+        overflow-x: hidden;
+    }
+    
+    @media (max-width: 600px) {
+        body {
+            margin: 0; /* マージンをリセット */
+            font-size: 16px; /* 明示的にベースサイズを指定 */
+        }
+        #main-content {
+            padding: 20px 15px; /* パディングをスマホ用に最適化 */
+            max-width: 100%;
+        }
+        #toc-container {
+            display: none; /* スマホで縮小される最大の原因になりやすいため一時停止 */
+        }
+    }
 </style>
 </head>
 <body>
@@ -2426,3 +2443,4 @@
 
 </body>
 </html>
+

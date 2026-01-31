@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+    /* ベース設定 */
+    body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin-left: 3%;
+        margin-right: 5%;
+        padding: 0;
+        background-color: #fcfcfc;
+    }
+
+    /* 目次エリア（右側フローティング・格納式） */
+    #toc-container {
+        position: fixed;
+        top: 0;
+        right: -260px; /* ★通常は画面外に隠す（幅300pxのうち40pxだけ見せる） */
+        width: 300px;
+        height: 100vh;
+        background-color: #f4f4f4;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        transition: right 0.3s ease; /* ★なめらかに動く設定 */
+        z-index: 1000;
+        display: flex; /* タブと中身を横並び */
+    }
+
+    /* カーソルが乗った時に飛び出す設定 */
+    #toc-container:hover {
+        right: 0; /* 画面内に出てくる */
+    }
+
+    /* 目次の「つまみ（タブ）」 */
+    #toc-tab {
+        width: 40px; /* つまみの幅 */
+        background-color: #AE3379;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        writing-mode: vertical-rl; /* 縦書き */
+        font-weight: bold;
+        letter-spacing: 3px;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 5px 0 0 5px;
+    }
+
+    /* 目次リスト本体 */
+    #toc-content-wrapper {
+        width: 260px;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #toc-list { list-style: none; padding: 0; margin: 0; }
+    #toc-list li { margin-bottom: 8px; }
+    #toc-list a {
+        text-decoration: none;
+        color: #666;
+        font-size: 0.9em;
+        display: block;
+        padding: 5px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+        border-left: 3px solid transparent;
+    }
+    #toc-list a:hover { background-color: #e0e0e0; }
+    
+    /* アクティブな目次 */
+    #toc-list a.active {
+        color: #AE3379;
+        background-color: #dcefff;
+        font-weight: bold;
+        border-left: 3px solid #AE3379;
+    }
+
+    /* メインコンテンツエリア */
+    #main-content {
+        max-width: 800px;
+        margin: 0 auto; /* 中央寄せ */
+        padding: 40px 20px;
+        /* 右側に目次タブ分の余白を少し確保（被り防止） */
+        padding-right: 50px; 
+    }
+
+    /* コンテンツ装飾 */
+    h2 {
+        background-color: #AE3379;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-top: 60px;
+        font-size: 1.5em;
+        scroll-margin-top: 20px;
+    }
+    .question-block {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+        background-color: #fff;
+    }
+    h3 {
+        border-left: 5px solid #AE3379;
+        padding-left: 10px;
+        color: #AE3379;
+    }
+    .similar-question {
+        background-color: #f9f9f9;
+        border: 1px dashed #bbb;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 5px;
+    }
+    .options-vertical { margin: 10px 0; padding-left: 20px; }
+    .options-horizontal {
+        display: flex; flex-wrap: wrap; gap: 15px;
+        margin-top: 10px; font-weight: bold;
+        background-color: #eee; padding: 10px; border-radius: 4px;
+    }
+    .citation { font-size: 0.8em; color: #888; text-align: right; }
+
+    /* スマホ・極小画面対応 */
+    @media (max-width: 600px) {
+        #main-content { padding-right: 20px; }
+        /* スマホでも邪魔なら以下で目次を非表示にすることも可能 */
+        /* #toc-container { display: none; } */
+    }
+</style>
+</head>
+<body>
+
+<!-- 目次コンテナ（ここを追加） -->
+<nav id="toc-container">
+    <strong>目次</strong>
+    <ul id="toc-list">
+        <!-- JSでここにリストが生成されます -->
+    </ul>
+</nav>
+
+<!-- コンテンツ本文 (一部抜粋・これまでの出力内容が入ります) -->
+<div id="content-main">
+
+    <!-- 分野1: 神経生理総論 -->
+    <h2>[神経生理総論]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問1)</h3>
+        <div class="options-vertical">
+            1． 静止膜電位の形成にイオンポンプは必要ない<br>
+            2． 1 個のニューロンが複数個のニューロンから出る軸索からのシナプス結合を受ける様式を発散という<br>
+            3． 100 個の顆粒細胞からでる軸索が 1 個のプルキンエ細胞に発散する<br>
+            4． 伸長反応は単シナプス反射である<br>
+            5． 双極細胞は相反する中心一周辺受容野をもつ
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,4 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation">[1]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問1)</h4>
+            <div class="options-vertical">
+                １） 静止膜電位の形成にイオンポンプは必要ない<br>
+                ２） 1 個の顆粒細胞から出る軸索は 100 個のプルキンエ細胞に発散する<br>
+                ３） 伸張反射は単シナプス反射である<br>
+                ４） 双極細胞は相反する中心―周辺受容野をもつ<br>
+                ５） 100 個のプルキンエ細胞は１本の並行線維が収束する
+            </div>
+            <div class="options-horizontal">
+                a) 1,2,3  b)1,2,5   c)1,4,5   d)2,3,4   e)3,4,5
+            </div>
+            <div class="citation">[2]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】神経生理総論・シナプス伝達 (2023年 問1, 問2)</h3>
+        <!-- 2025/2024には直接対応する問題がないため、2023年の問題を本題として扱います -->
+        
+        <h4>問 1. 最も不適切なのはどれか</h4>
+        <div class="options-vertical">
+            1. シナプス後細胞の発火確率を下げるのが IPSPである。<br>
+            2. IPSP は脱分極性であることもある。<br>
+            3. 伝達物質の回収・再利用はほかの物質に代謝されない。<br>
+            4. シナプス伝達の興奮性/抑制性は伝達物質の種類だけでは決まらない。<br>
+            5. イオンチャネル一体型受容体は主に K⁺選択性チャネルである。
+        </div>
+        <div class="options-horizontal">
+            a) 1, 3 b) 1, 5 c) 2, 4 d) 3, 5 e) 4, 5
+        </div>
+        <div class="citation">[3]</div>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <h4>問 2. 最も適当なものはどれか</h4>
+        <div class="options-vertical">
+            1. 受容器電位と後シナプス電位はアナログ伝達である。<br>
+            2. 抑制性神経細胞がほかの抑制性神経細胞に抑制されると抑制が増幅される。<br>
+            3. シナプス前終末からシナプス後膜への伝達は AM から FM<br>
+            4. 相反神経支配は機能が相反する効果器を促進することで機能を反転させる<br>
+            5. シナプス入力は空間的にも時間的にも加重され、シナプス後電位の値は多様性を示す。
+        </div>
+        <div class="options-horizontal">
+            a) 1, 3 b) 1, 5 c) 2, 4 d) 3, 5 e) 4, 5
+        </div>
+        <div class="citation">[3]</div>
+    </div>
+
+
+    <!-- 分野2: 脊髄 -->
+    <h2>[脊髄]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問2)</h3>
+        <div class="options-vertical">
+            1． 脊髄網様体視床路は前側索を上行し、脳幹網様体を経て視床に投射するが、その多くは傷害的受容器からの刺激に応答する<br>
+            2． 非識別型触・圧伝導路は前脊髄視床路を上行する<br>
+            3． 長後索路は、識別型触覚の伝導路で手指などの敏感な部位の触覚を伝える<br>
+            4． 外側皮質脊髄路、前皮質脊髄路は随意運動を支配する主要な伝導路である<br>
+            5． 灰白質に対する白質の割合は頚髄よりも仙随の方が高い
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 3 c) 4 d) 5 e) 何れでもない
+        </div>
+        <div class="citation">[1]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問2)</h4>
+            <div class="options-vertical">
+                １） 脊髄網様体視床路は、前側索を上行し、侵害的受容を受けながら脳幹網様体から視床に投射する<br>
+                ２） 非識別型触・圧伝導路は、前脊髄視床路を上行する<br>
+                ３） 長後索路は、識別型触覚の伝導路で手指などの敏感な部位の触覚を伝える<br>
+                ４） 外側皮質脊髄路、前皮質脊髄路は随意運動を支配する主要な伝導路である<br>
+                ５） 白質に対する灰白質の割合は頚髄よりも仙随の方が高い
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 3  c) 4  d) 5  e) 何れでもない
+            </div>
+            <div class="citation">[2]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切なものはどれか (2023年 問3)</h4>
+            <div class="options-vertical">
+                1. 拮抗抑制は単シナプス反射である<br>
+                2. Ⅰａ筋繊維末端におけるシナプス前抑制は、GABA による過分極によって引き起こされる。<br>
+                3. 白質に対する灰白質割合は頸髄よりも仙髄の方が低い<br>
+                4.長後索路は識別型触覚の上行路であり手指の敏感な感覚などを伝える<br>
+                5.レンショウ細胞は抑制介在性ニューロンである。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+            </div>
+            <div class="citation">[3], [4]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問3)</h3>
+        <div class="options-vertical">
+            1． パーキンソン病患者は緊張性伸長反射が亢進する<br>
+            2． 相同性伸張反射は筋の伸長時、動的位相に現れる<br>
+            3． 脊髄内で伸筋を支配するニューロンは屈筋のニューロンの背側を通っている<br>
+            4． 歩行リズムの駆出や調節にグルタミン酸やモノアミン（特にセロトニン）が関与する<br>
+            5． 膝蓋腱反射では大腿四頭筋が収縮するとともに大腿屈筋群も弛緩する
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[5]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問3)</h4>
+            <div class="options-vertical">
+                １） パーキンソン病患者は緊張性伸長反射が亢進する<br>
+                ２） 相同性伸張反射は筋の伸長時、動的位相に現れる<br>
+                ３） 脊髄内で伸筋を支配するニューロンは屈筋のニューロンの腹側を通っている<br>
+                ４） 歩行リズムの駆出や調節にグルタミン酸やモノアミン（特にセロトニン）が関与する<br>
+                ５） 膝蓋腱反射では大腿四頭筋が収縮するとともに大腿屈筋群も弛緩する
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[6]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2023年 問4)</h4>
+            <div class="options-vertical">
+                1. 外側皮質脊髄路や前皮質脊髄路は、随意運動を支配する神経の主要経路である。<br>
+                2. 皮膚からの痛覚情報は、後索-内側毛帯路を介して体性感覚野に伝達される。<br>
+                3. γ運動ニューロンはゴルジ腱器官の感受性を調節する。<br>
+                4. 歩行リズムの駆動や調節は GABA やアセチルコリンが主に関与する。<br>
+                5. パーキンソン病患者は緊張性伸張反射が亢進する。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation">[4]</div>
+        </div>
+    </div>
+
+
+    <!-- 分野3: 感覚総論 -->
+    <h2>[感覚総論]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問4)</h3>
+        <div class="options-vertical">
+            1． 感覚は、特殊感覚、体性感覚、平衡感覚の三つに大別される<br>
+            2． 光受容器に加わる光の強さが大きいほど、細胞膜の脱分極の程度が大きくなる<br>
+            3． 嗅覚系において、嗅細胞は鼻腔の奥の嗅上皮にある<br>
+            4． 側方抑制により感覚のコントラストが強くなる<br>
+            5． ウェーバーの法則において、ウェーバー比は感覚の種類によって異なる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation">[5]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問4)</h4>
+            <div class="options-vertical">
+                １） 感覚は、特殊感覚、体性感覚、平衡感覚の 3 つに大別される<br>
+                ２） 光受容器に加わる光の強さが大きいほど、細胞膜の脱分極の程度が大きくなる<br>
+                ３） 嗅覚系において、嗅細胞は鼻腔の奥の嗅上皮にある<br>
+                ４） 側方（周辺）抑制により、感覚のコントラストが強くなる<br>
+                ５） ウェーバーの法則において、ウェーバー比は感覚の種類により異なる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation">[6]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】適切なものを選べ (2023年 問5)</h4>
+            <div class="options-vertical">
+                1. 機械受容器は順応しない<br>
+                2. 化学受容器による受容器電位の発生はイオンチャネルの開口に依らない<br>
+                3. 光受容器は受ける光が強いほど、より脱分極する<br>
+                4. 冷感の受容器電位は細胞膜を過分極<br>
+                5. 側方（周囲）抑制は感覚のコントラストを高める
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[4], [7]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問5)</h3>
+        <div class="options-vertical">
+            1． 特殊感覚には視覚、聴覚、嗅覚、痛覚などがある<br>
+            2． 聴覚系において蝸牛は中耳に存在する<br>
+            3． 触圧覚、温度覚、嗅覚、視覚、聴覚などには順応がみられるが、痛覚は順応しない<br>
+            4． 味覚は接触性受容器である化学受容器を介して起こる<br>
+            5． 神経終末または神経細胞自身が受容器となっているものを第一次感覚細胞という
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,3 b) 1,2,5 c) 1,2,4 d) 2,3,4 e) 3,4,5
+        </div>
+        <div class="citation">[5], [8]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問5)</h4>
+            <div class="options-vertical">
+                １） 体性感覚は、皮膚感覚と深部感覚からなる<br>
+                ２） 食べ物に含まれる化学物質は、口腔内にある味蕾と呼ばれる感覚受容器を刺激する<br>
+                ３） 視覚系において、錐体は杆体に比べて光に対する感度が低い<br>
+                ４） ウェーバーの法則において、差閾(ΔS)が小さいほどウェーバー比は小さくなり、弁別能がよいことを意味する<br>
+                ５） ウェーバー・フェヒナーの法則は、｢感覚の大きさは刺激強度の対数に比例する｣ことを示す
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation">[9]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切なものを選べ (2023年 問6)</h4>
+            <div class="options-vertical">
+                1. 深部(固有)感覚の発生は機械受容器の活性化による<br>
+                2. 嗅覚の感覚受容器は 1次感覚細胞上にある<br>
+                3. 視細胞のロドプシンはイオンチャネルの 1 部である<br>
+                4. 温度受容器は痛覚の発生に関わる<br>
+                5. 機械受容器の Piezo は速い順応をしめす
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[7]</div>
+        </div>
+    </div>
+
+    <!-- 分野4: 体性感覚 -->
+    <h2>[体性感覚]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問6)</h3>
+        <div class="options-vertical">
+            1． 体性感覚野の皮質の大部分は側頭葉に存在する<br>
+            2． ブローカー3b 野は一次体性感覚野(S1)である<br>
+            3． 顔の体性感覚のほとんどは三叉神経によって中継される<br>
+            4． 一次求心性軸索は前根から脊髄に入る<br>
+            5． 一次求心性繊維の径は様々であり、無髄神経である C 繊維は最も太い神経線維である
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 2,3 c) 2,5 d) 3,4 e) 3,5
+        </div>
+        <div class="citation">[1]</div>
+
+        <div class="similar-question">
+            <h4>【類題】正しいものを選べ (2023年 問7)</h4>
+            <div class="options-vertical">
+                1. 後索-内側毛帯路は主に触・圧・振動覚を伝え、視床を中継し大脳皮質に投写する<br>
+                2. 顔⾯領域での痛覚や触覚は顔⾯神経核を介して大脳皮質に伝えられる。<br>
+                3. Aβ・Aδ・Cの各繊維およびその二次繊維はほぼ同じ経路を通って脊髄を上行する<br>
+                4. 脊髄視床路は主に痛覚・温度覚を伝え、視床でシナプスを作らず直接大脳皮質に投射する<br>
+                5. エンドルフィンなどの脳内モルフィン様物質は痛覚伝導路で神経伝達を抑制する
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation">[2]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問7)</h3>
+        <div class="options-vertical">
+            1． 筋紡錘は深部感覚の機械受容体である<br>
+            2． ヒトの手においてマイスネル小体は数ミリメートル幅の小さな受容野を持つ<br>
+            3． パチニ小体は約 300Hz の振動に最もよく反応する<br>
+            4． 指先に比べて前腕の方が機械受容器の密度が高い<br>
+            5． 後索－内側毛帯路は触覚に関与する
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[1, 3]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問6)</h4>
+            <div class="options-vertical">
+                １） 体性感覚系の受容器の多くは機械受容体である<br>
+                ２） 機械受容体のパチニ小体は真皮の深くに位置している<br>
+                ３） マイスネル小体はメルケル盤よりも順応が遅い<br>
+                ４） 2 点識別覚は体の部分によって大きく異なる<br>
+                ５） 神経線維において、C 線維は無髄神経であり、それ以外は無髄神経である
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[4]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問7)</h4>
+            <div class="options-vertical">
+                １） 機械受容器イオンチャネルの開閉は、細胞膜の伸展や張力の変化に依存する<br>
+                ２） 皮膚の機械受容器であるマイスネル正体はパチ二小体のおよそ 10 倍の大きさである<br>
+                ３） 皮膚の機械受容器であるパチ二小体は、手のおよそ半分に及ぶ大きな受容野を持つ<br>
+                ４） マイスネル小体は、約 50Hz の振動に最もよく反応する<br>
+                ５） 皮膚の感覚受容器からの神経線維は、径の細い順に、Aα、Aβ、Aδ、C である
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation">[4, 5]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】体性感覚・痛覚 (2023年 問8)</h3>
+        <!-- 2025/2024には痛覚特化の独立問題がないため、2023年を本題扱いとします -->
+        <h4>不適切なものを選べ</h4>
+        <div class="options-vertical">
+            1. 内因性発痛物質は局在の明瞭な痛みを起こす。<br>
+            2. やけどの痛みを伝えているのは主に温受容器である。<br>
+            3. 痛いときにさすると痛みがやわらぐのは、脊髄レベルでのエンドルフィンの作用である。<br>
+            4. モルヒネによる鎮痛は脊髄、延髄、中脳の全てに作用する。<br>
+            5. 「心頭滅却すれば火もまた涼し」の状態では、大脳から下降性の脳内オピオイド系の賦活がある。
+        </div>
+        <div class="options-horizontal">
+            a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+        </div>
+        <div class="citation">[6]</div>
+    </div>
+
+
+    <!-- 分野5: 自律神経 -->
+    <h2>[自律神経]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問8)</h3>
+        <div class="options-vertical">
+            1． 交感神経系の節後線維は、副交感神経系の節後線維と比較して長い<br>
+            2． 仙髄副交感神経は脊髄側角から起始し、骨盤神経を経由して膀胱、直腸や生殖器を支配している<br>
+            3． 交感神経節前ニューロンは脊髄側角から脊髄前根を経て白交連枝を経て神経節へ伝わる<br>
+            4． 瞳孔散大筋は副交感神経のみがはたらいており、瞳孔括約筋は交感神経のみがはたらいている<br>
+            5． 交感神経節前ニューロンは、コリン作動性である
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[3]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問8)</h4>
+            <div class="options-vertical">
+                １） 交感神経系の節後線維は、副交感神経系の節後線維と比較して長い<br>
+                ２） 汗腺や骨格筋の一部の血管を支配する交換神経節後ニューロン線維はアセチルコリンを分泌する<br>
+                ３） 副腎髄質を支配する交感神経節前ニューロンは神経節を介さず副腎髄質に直接ノルアドレナリンを分泌する<br>
+                ４） 交感神経節前ニューロンは脊髄側索から脊髄前根を経て白交連枝を経て神経節へ伝わる<br>
+                ５） 交感神経節前ニューロンは、コリン作動性である
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[5]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なものはどれか (2023年 問9)</h4>
+            <div class="options-vertical">
+                1. 交感神経系の節後線維は、副交感神経系の節後線維と比較して短い。<br>
+                2. 交感神経節前ニューロンは、アドレナリン作動性である。<br>
+                3. 副腎髄質を支配する交感神経節前ニューロンは神経節を介さず、副腎髄質に直接アセチルコリンを分泌する<br>
+                4. 交感神経節前ニューロンは脊髄側索から脊髄後根を経て白交連枝を経て神経節へ伝わる<br>
+                5. 副交感神経節後線維は、一般的にアドレナリン作動性である。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[6]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問9)</h3>
+        <div class="options-vertical">
+            1． 胃は自律性支配、二重支配、拮抗支配の全てを受ける<br>
+            2． 交感神経のうち汗腺や骨格筋の一部の血管を支配する節後線維はアセチルコリンを分泌する<br>
+            3． 副腎髄質を支配する交感神経節前ニューロンは神経節を介さず副腎髄質に直接アセチルコリンを分泌する<br>
+            4． 自律神経遠心性繊維（交感神経、副交感神経）は、一般に常時自発的に活動していない<br>
+            5． 軸索反射とは、軸索分岐で興奮が軸索側枝に逆行性に伝導されることである
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[3, 7]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問9)</h4>
+            <div class="options-vertical">
+                １） 胃は自律性支配、二重支配、拮抗支配の全てを受ける<br>
+                ２） 交感神経のうち汗腺や骨格筋の一部の血管を支配する節後線維はアセチルコリンを分泌する<br>
+                ３） 瞳孔散大筋は動眼副交感神経、瞳孔括約筋は動眼交感神経が働いている<br>
+                ４） 自律神経遠心性線維（交感神経、副交感神経）は一般に常時自発性に活動している<br>
+                ５） 軸索反射が偏頭痛の発生に関与すると示されている
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[5, 8]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切な文章を選択せよ (2023年 問10)</h4>
+            <div class="options-vertical">
+                1. 仙髄から迷走神経が副交感神経を通っており、膀胱、直腸や生殖器を支配している。<br>
+                2. 胃は自律性抑制、二重抑制、拮抗抑制全てが働いている。<br>
+                3. 瞳孔反射は動眼副交感神経、対光反射は動眼交感神経が働いている。<br>
+                4. 遠心性繊維(交感神経、副交感神経)は常時、自律的に発火して働いている。<br>
+                5. 呼吸中枢において、吸気時では吸気ニューロン、呼気時では呼気ニューロンが働く。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[6, 9]</div>
+        </div>
+    </div>
+
+
+    <!-- 分野6: 平衡感覚 -->
+    <h2>[平衡感覚]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問10)</h3>
+        <div class="options-vertical">
+            1． 前庭器官(前庭迷路)は耳石器と半規管からなる<br>
+            2． 耳石器の不動毛が動毛側に傾くと Na+流入により脱分極する<br>
+            3． 耳石器の平衡斑における有毛細胞の配列はストリオーラ(storiola)を境に逆になる<br>
+            4． 半規管は頭の対側にも対をなして存在する<br>
+            5． ある半規管神経の興奮を起こす頭部の回転は、常に対となる半規管神経の抑制を伴う
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[7]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問11)</h4>
+            <div class="options-vertical">
+                １） 内耳神経は蝸牛神経と前庭神経で構成される<br>
+                ２） 立位では卵形嚢の有毛細胞は垂直、球形嚢は水平に並んでいる<br>
+                ３） 膨大部の有毛細胞は同じ方向に動く<br>
+                ４） 半規管の有毛細胞は膨大部に存在する<br>
+                ５） 一側の一個の半規管は全ての回転を検知する
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[8, 10]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問11)</h4>
+            <div class="options-vertical">
+                1. 内耳神経は蝸牛神経と前庭神経からなる。<br>
+                2. 前庭器官は耳石器と(三半)半規管からなる。<br>
+                3. 耳石器のうち卵形嚢は水平方向、球形嚢は垂直方向の加速度を感知する。<br>
+                4. 立位では卵形嚢の有毛細胞は垂直、球形嚢の有毛細胞は水平方向に並んでいる。<br>
+                5. 不動毛が動毛側に変位すると Na+流入により脱分極が起こる。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[9]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問11)</h3>
+        <div class="options-vertical">
+            1． 耳石器は頭の傾きと直線的な加速度を感知する<br>
+            2． 耳石は斑のゼラチン状の被膜の内部に散りばめられている<br>
+            3． 耳石器の感覚毛の不動毛が動毛の方向に傾いたときに、有毛細胞膜は過分極する<br>
+            4． 半規管において有毛細胞は膨大部に存在する<br>
+            5． 一側の３つの半規管は頭の全ての角度の回転の検知に役立っている
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,3 b) 2,3,4 c) 1,4,5 d) 2,4,5 e) 3,4,5
+        </div>
+        <div class="citation">[7]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問10)</h4>
+            <div class="options-vertical">
+                １） 耳石器において、直立で卵形嚢は水平、球形嚢垂直方向の加速度を検知する<br>
+                ２） 耳石器の各平衡斑は striola（ストリオーラ）によって二つの部分に分けられる<br>
+                ３） 耳石器の有毛細胞は 50〜100 本の動毛と 1 本の不動毛がある<br>
+                ４） 耳石器の感覚毛が不動毛の方向に傾いたときに、有毛細胞膜は脱分極する<br>
+                ５） 半規管は、頭を横に振ったり、頷いたりしたときの頭の回転を検知する
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation">[8]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適当なものを選べ (2023年 問12)</h4>
+            <div class="options-vertical">
+                1.耳石器の平衡斑における有毛細胞の配列はストリオーラを境に逆になる。<br>
+                2.頭を上下にうんうんと頷くように振ると上（前）半規管が反応する。<br>
+                3.回転運動による半規管内の内リンパ液の慣性モーメントがクプラを偏移させる。<br>
+                4.頭部の左向きの回転は左水平半規管の有毛細胞の興奮、右水平半規管の有毛細胞の抑制を起こす。<br>
+                5.水平性前庭動眼反射において回転方向の前庭神経の興奮は動眼神経を興奮させ対側の外転神経を抑制する。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[9, 11]</div>
+        </div>
+    </div>
+
+
+    <!-- 分野7: 聴覚 -->
+    <h2>[聴覚]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問12)</h3>
+        <div class="options-vertical">
+            1． 縦波とは媒質の揺れる方向が波の進む方向とは垂直な波動である<br>
+            2． 音とは、振動が縦波として遠方へ伝わることである<br>
+            3． 耳介は、集音や音源定位で重要な役割を果さない<br>
+            4． 音圧により蓋膜が揺れてコルチ器も上下に揺れることで、有毛細胞が基底膜に押し付けられる<br>
+            5． 基底膜は、頂部のほうが幅が狭く、柔らかい
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">[7, 12]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問12)</h4>
+            <div class="options-vertical">
+                １） 縦波とは媒質の揺れる方向が波の進む方向とは垂直な波動である<br>
+                ２） 音とは、振動が横波として遠方へ伝わることである<br>
+                ３） 耳介は、集音や音源定位で重要な役割を果たす<br>
+                ４） 音圧により蓋膜が揺れてコルチ器も上下に揺れることで、有毛細胞が基底膜に押し付けられる<br>
+                ５） 基底膜は、頂部のほうが幅が狭く、柔らかい
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[10]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なものを選べ (2023年 問13)</h4>
+            <div class="options-vertical">
+                1. 耳に入った音の振動が耳小骨を伝わる順序はツチ骨→アブミ骨→キヌタ骨である<br>
+                2. 中耳筋は大きな音への防御機構であり、瞬間的に入力する過大音に対して働く<br>
+                3. 内リンパ液は体液成分よりNa+が高い<br>
+                4. 前庭階の外リンパ液は体液成分とほぼ同じである<br>
+                5. 中心階は前庭階にくらべて-80mVの電位を持っている
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[11]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問13)</h3>
+        <div class="options-vertical">
+            1． 有毛細胞の受容器電位は Ca2+によって生じる<br>
+            2． 外耳道に音圧を増幅する機能はない<br>
+            3． 基底膜の特定の部位に特定の周波数で進行波が生じるが、高周波は蝸牛孔側で生じる<br>
+            4． 求心性神経線維は内有毛細胞では 1 本のみである<br>
+            5． 中心階は前庭階に比べて約+140mV の電位差がある
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4,5 e) 何れでもない
+        </div>
+        <div class="citation">[12]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問13)</h4>
+            <div class="options-vertical">
+                １） 有毛細胞の受容器電位は Ca2+によって生じる<br>
+                ２） 外耳道に音圧を増幅する機能はない<br>
+                ３） 基底膜の特定の部位に特定の周波数で進行波が生じるが、高周波は基底部側で生じる<br>
+                ４） 求心性遠隔神経繊維は有毛細胞には 1 本のみである<br>
+                ５） 中心階は前庭階に比べて 140mV の電位差がある
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[10, 13]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問14)</h4>
+            <div class="options-vertical">
+                1. 耳小骨は鼓膜の振動を増幅させ、前庭階の外リンパ液に伝える<br>
+                2. 蝸牛神経は蝸牛神経節細胞からの軸索からなる<br>
+                3. 有毛細胞の受容器電位はナトリウムイオンにより生じる<br>
+                4. 外有毛細胞は内有毛細胞の数より多い<br>
+                5. 蝸牛器官の有毛細胞には、動毛の元器である基底小体のみが存在する
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation">[11, 14]</div>
+        </div>
+    </div>
+
+
+    <!-- 分野8: 味覚・嗅覚 -->
+    <h2>[味覚・嗅覚]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問14)</h3>
+        <div class="options-vertical">
+            1． 1 つの嗅覚受容細胞には、複数の嗅覚受容体が存在する<br>
+            2． 各糸球体は、1 種類の嗅覚受容体から入力を受ける<br>
+            3． 嗅神経末端では、糸球体から僧帽細胞と房縮細胞の単一の主樹状突起に入力を送る<br>
+            4． 味細胞の寿命は、約 6 ヶ月である<br>
+            5． 塩味と甘味の味覚受容体はイオンチャネル型である
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,4 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation">[12, 15]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問15)</h4>
+            <div class="options-vertical">
+                １） 嗅細胞の嗅覚受容体はすべて G タンパク質共役型である<br>
+                ２） 一種類の匂い分子は一種類の嗅覚受容体にのみ結合する<br>
+                ３） 嗅覚情報は、顆粒細胞によって嗅細胞から嗅皮質に伝えられる<br>
+                ４） 各糸球体は､複数種類の嗅覚受容体から入力を受ける<br>
+                ５） 嗅球から嗅皮質へと出力するのは傍糸球体細胞と顆粒細胞である
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[13]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2023年 問16)</h4>
+            <div class="options-vertical">
+                1)嗅受容体はすべて G タンパク質共役型であり、Golf が同定されている。<br>
+                2)一種類の匂い分子は数種類の匂い受容体に結合できる。<br>
+                3)一種類の匂い分子はただ一つの糸球体に投射する。<br>
+                4)異なる匂い受容体を持つ嗅細胞から同じ糸球体に投射する。<br>
+                5)嗅球からの出力である外側嗅索は直接、眼窩前頭皮質に入力する。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 3 c) 3, 4 d) 2, 5 e) 4, 5
+            </div>
+            <div class="citation">[14]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問15)</h3>
+        <div class="options-vertical">
+            1． 嗅覚受容体は G タンパク質共役受容体である<br>
+            2． 嗅覚受容体は嗅覚受容細胞と支持細胞の二つからなる<br>
+            3． 僧帽細胞と房飾細胞は抑制性である<br>
+            4． 苦味、甘味、旨みの二次メッセンジャーは全て同じである<br>
+            5． 味覚受容体において味蕾に一つの味覚受容器がある
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,3 b) 2,3,5 c) 1,4,5 d) 2,4,5 e) 3,4,5
+        </div>
+        <div class="citation">[15]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問14)</h4>
+            <div class="options-vertical">
+                １） 味蕾は舌のみに存在する<br>
+                ２） 塩味は G タンパク質共役型受容体である<br>
+                ３） 苦味、甘味、旨味で用いられる二次メッセンジャーは全く異なる<br>
+                ４） 基本 5 味は甘味、旨味、苦味、酸味、塩味である<br>
+                ５） 味覚は延髄孤束核から視床を介さずに一次味覚野へ伝えられる
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation">[13]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2023年 問15)</h4>
+            <div class="options-vertical">
+                1. 味細胞の TRPV1 受容体で辛味を感じる。<br>
+                2. 塩味、酸味は食物のNa+、H+を透過して発生する。<br>
+                3. 甘味、苦味、うま味は TRPM5 チャネルを開口する。<br>
+                4. 食物の温度は三叉神経核で感知するため味覚とは関係しない。<br>
+                5. 孤束核のそれぞれの細胞は複数の味覚を感じる。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation">[14]</div>
+        </div>
+    </div>
+
+
+    <!-- 分野9: 視覚 -->
+    <h2>[視覚]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問16)</h3>
+        <div class="options-vertical">
+            1． 水晶体が混濁すると緑内障になる<br>
+            2． 視神経乳頭には視細胞が存在せず盲点となる<br>
+            3． 遠視は網膜の後ろで結像するため、凸レンズで矯正する<br>
+            4． 杆体細胞は錐体細胞よりも光感受性が高い<br>
+            5． 杆体細胞は 3 種類の光を感知する
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation">[15]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問16)</h4>
+            <div class="options-vertical">
+                １） 錐体細胞は網膜周辺部に存在する<br>
+                ２） 視細胞は活動電位を発生し、双極細胞へ情報を送る<br>
+                ３） 神経節細胞の軸索は視神経である<br>
+                ４） 赤錐体細胞のオプシンは X 染色体上にある<br>
+                ５） 錐体細胞には吸収波長の異なる 4 種類の細胞がある
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation">[13, 16]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2023年 問17)</h4>
+            <div class="options-vertical">
+                1. 近視は、網膜の後方で物体をとらえてしまうことによる<br>
+                2. 視神経乳頭には、視細胞が存在しない<br>
+                3. 毛様体筋が収縮して、小帯線維が緩むと、水晶体は厚くなる<br>
+                4. 水晶体の弾性力は年齢とともに低下し、眼の調節力が落ちる<br>
+                5. 白内障では、眼房水の産生と排出のバランスが悪くなり、眼圧が上昇する
+            </div>
+            <div class="options-horizontal">
+                選択肢未再現
+            </div>
+            <div class="citation">[17]</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問17)</h3>
+        <div class="options-vertical">
+            1． ロドプシンは桿体細胞の円盤膜上に存在する<br>
+            2． on 型双極細胞は光刺激によって脱分極する<br>
+            3． 視細胞膜上の cGMP 依存性チャネルは光刺激によって閉じる<br>
+            4． 左側の視索障害で両目の右側の視野が見えなくなる<br>
+            5． M 型神経節細胞は網膜の周辺部に存在し、広い領域を持つ
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4 のみ e) すべて
+        </div>
+        <div class="citation">[15, 18]</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問17)</h4>
+            <div class="options-vertical">
+                １） 視細胞の神経伝達物質はアセチルコリンである<br>
+                ２） 双極細胞は神経節細胞へ情報を送る<br>
+                ３） 中心窩は網膜で最も視力の良い場所である<br>
+                ４） 視細胞膜上の cGMP 依存性チャネルは光により開く<br>
+                ５） 視細胞は光があたると脱分極を起こす
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation">[16]</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適当なものは何か (2023年 問18)</h4>
+            <div class="options-vertical">
+                1. 光刺激によって、視細胞のグルタミン酸の放出が減少する<br>
+                2. 光刺激により、視細胞の細胞膜上の cGMP 依存性チャネルが開く<br>
+                3. 暗順応の第 1相は杆体細胞の順応であり、第 2相は錐体細胞の順応である<br>
+                4. 光刺激によって、オン型双極細胞のグルタミン酸放出が増加する<br>
+                5. 中心窩付近では、視細胞：双極細胞：神経節細胞＝1：1：1 である
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation">[17]</div>
+        </div>
+    </div>
+
+    <!-- 分野10: 運動総論 -->
+    <h2>[運動総論]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問18)</h3>
+        <div class="options-vertical">
+            1． 骨格筋に発生する張力は、筋特性に依存するが、興奮する運動ニューロンの数と発火頻度には依存する<br>
+            2． 運動単位は単一の運動ニューロンとそのニューロンに投射される筋線維の数によって定義される<br>
+            3． 終盤電位の発生部位は神経筋接合部の終板領域に限定される<br>
+            4． 不随意運動とは、反射運動を含む随意運動以外の運動のことである<br>
+            5． 運動の制御について、フィードバック制御では誤差の補正は行われない
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,4 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問18)</h4>
+            <div class="options-vertical">
+                １） 筋の張力は筋特異性に依存するが、運動ニューロンの数と発火頻度には依存しない<br>
+                ２） 運動単位は単一の運動ニューロンとそのニューロンに投射される筋線維の数によって定義される<br>
+                ３） 終盤電位の発生部位は終盤領域に限定される<br>
+                ４） 不随意運動とは反射を含む随意運動以外のすべての運動のことである<br>
+                ５） 運動の制御について、フィードフォワード制御では誤差の補正は行われない
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 4  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問20)</h4>
+            <div class="options-vertical">
+                1. 終板電位は終盤領域のみに発生する<br>
+                2. ミオパチーでは運動単位電位が増大する<br>
+                3. 脊髄運動ニューロンの軸索はオリゴデンドロサイトで覆われ髄鞘を形成することで神経繊維の保護と伝達速度の飛躍的な向上を成し遂げている<br>
+                4. 骨格筋の張力は、筋特異性に依存した張力と、運動ニューロンの数にのみ依存する<br>
+                5. フィードフォワード制御により誤差の補正が行われている
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問19)</h3>
+        <div class="options-vertical">
+            1． 神経支配比が小さいほど細かな制御が可能になる<br>
+            2． ミオバチー（筋疾患）では運動単位電位の増大が見られる<br>
+            3． 脊髄運動ニューロンの軸索はシュワン細胞に覆われ、髄鞘を形成することで神経線維の保護のみを成し遂げている<br>
+            4． 通常 1 個の運動ニューロンの興奮は、支配下の全ての骨格筋繊維の収縮を確実には引き起こさない<br>
+            5． S 型と F 型筋繊維を比較した場合、S 型筋繊維は単収縮の筋張力は小さいが、収縮持続時間は長い
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,3 b) 1,4,5 c) 2,3,4 d) 2,4,5 e) 1,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問19)</h4>
+            <div class="options-vertical">
+                １） 神経支配比が大きいほど細かな制御が可能になる<br>
+                ２） ミオバチー（筋疾患）では運動単位電位の増大が見られる<br>
+                ３） 脊髄運動ニューロンの軸索はシュワン細胞に覆われ、髄鞘を形成することで神経線維の保護のみを成し遂げている<br>
+                ４） 通常 1 個の運動ニューロンの興奮は、支配下の全ての骨格筋繊維の収縮を確実に引き起こす<br>
+                ５） S 型と F 型筋繊維を比較した場合、S 型筋繊維は単収縮の筋張力は小さいが、収縮持続時間は長い
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 3, 4, 5  c) 2, 4, 5  d) 4, 5  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適当なものを選べ (2023年 問19)</h4>
+            <div class="options-vertical">
+                1. 1 本の運動繊維は複数の運動ニューロンからの軸索入力のみをうける。<br>
+                2. 運動ニューロンプールは単一の髄節の特定領域である。<br>
+                3. 神経支配比の大きな運動ニューロンは細胞体も大きい。<br>
+                4. 一本の運動ニューロンの興奮が支配するすべての骨格筋繊維群を確実に収縮させる。<br>
+                5. 不随意運動とは、病的な状態における本人の意識によらない異常な状態である。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation">,</div>
+        </div>
+    </div>
+
+
+    <!-- 分野11: 脳幹 -->
+    <h2>[脳幹]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問20)</h3>
+        <div class="options-vertical">
+            1． 頸反射は前庭器官が破壊されると起こらない<br>
+            2． 呼吸中枢の背側呼吸ニューロン群は吸息性ニューロンである<br>
+            3． 脳幹を中脳レベルで切断すると除脳固縮が起こる<br>
+            4． 頭部が動いたとき、それを打ち消す方向に眼球を回転させ、視線を一定方向に保つ反射を前庭動眼反射が起こる<br>
+            5． 頭をひねると、ひねった側の前肢と後肢が屈曲する
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問20)</h4>
+            <div class="options-vertical">
+                １） 脳幹には摂食中枢がある<br>
+                ２） 外転神経は外側直筋を支配している<br>
+                ３） 開口反射は舌や口腔の侵害刺激や機械的刺激により起こる<br>
+                ４） 除脳固縮によりα運動ニューロンとγ運動ニューロンが興奮する<br>
+                ５） 頭をひねるとその側の前肢、後肢は屈曲し対側の肢は伸展することを、前庭頸反射という
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation">,</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切ものを選べ (2023年 問21)</h4>
+            <div class="options-vertical">
+                1. 頭をひねるとその側の前肢、後肢は屈曲し対側の肢は伸展する<br>
+                2. ネコの橋中心被蓋野腹側覚を電気刺激し続けると歩行をやめ座り込む<br>
+                3. 除脳固定によりγ運動ニューロンは抑制される<br>
+                4. 咀嚼は脳幹の機能によって調節される<br>
+                5. サッケード運動は中脳の上丘に支配されている
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+            </div>
+            <div class="citation">,</div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問21)</h3>
+        <div class="options-vertical">
+            1． 対光反射が正常な場合、光を当てた側と当てていない側の両方の目で瞳孔の縮瞳が起こる<br>
+            2． 電車の窓から景色を見ている人の眼には、視運動性眼振が起こる<br>
+            3． 抗重力筋が収縮することで立つことができる<br>
+            4． 姿勢変化の検出は主に体性感覚が行い、視覚や前庭器官が補佐している<br>
+            5． 橋中心視蓋野の腹側部(VTF)を電気刺激すると、座っていたネコが立ち上がり、歩きはじめる
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4 e) すべて
+        </div>
+        <div class="citation">,</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問21)</h4>
+            <div class="options-vertical">
+                １） 咀嚼は脳幹の機能によって調節される<br>
+                ２） 動物を一本の肢で立たせ、身体を抱えて前に移動すると、その肢を前にだして机を踏む跳び直り反応が見られる<br>
+                ３） 前庭動眼反射では、動眼神経核、外転神経核、前庭神経核が関与している<br>
+                ４） 遠くを見ると、開散運動が起こる<br>
+                ５） ネコの橋中心被蓋野背側覚を電気刺激し続けると歩行をやめすわりこむ
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】次のものから誤っているものを選べ (2023年 問22)</h4>
+            <div class="options-vertical">
+                1. 電車の窓から景色を見ている人の眼には視運動性眼振が見られる。<br>
+                2. 前庭動眼反射では、動眼神経核、外転神経核、前庭神経核が関与している。<br>
+                3. 近くのものを注視するには輻輳運動が起きる。<br>
+                4. 対光反射では光からの情報が網膜神経節細胞から視蓋前野のオリーブ核を経て、両側の動眼神経核に伝えられる。<br>
+                5. 中脳歩行誘発野では前庭脊髄路を介して脊髄を通り、歩行パターンを作る。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野12: 小脳 -->
+    <h2>[小脳]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問22)</h3>
+        <div class="options-vertical">
+            1． 小脳は運動の制御や学習に関わり、皮質、髄質（白質）、小脳核からなる<br>
+            2． プルキンエ細胞の強力な興奮性ニューロンである登上線維は下オリーブ核から生じる<br>
+            3． 小脳は 10 の葉からなる<br>
+            4． 登上線維と平行線維が同時に興奮すると、平行線維のシナプス結合が変化する<br>
+            5． 小脳が障害されると意図的な動作に伴う強い震え（企図振戦）が起こる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 2,3 c) 3,4 d) 4,5 e) 何れでもない
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問22)</h4>
+            <div class="options-vertical">
+                １） 小脳は皮質、髄質、小脳核からなる<br>
+                ２） 小脳は 10 の葉からなる<br>
+                ３） 登上線維は下オリーブ核から投射する<br>
+                ４） 登上線維と平行線維が同時に興奮すると平行線維のシナプスが変化する<br>
+                ５） 小脳が傷害されると意図的な動作に伴って起こる企画振戦が起こる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 3  c) 4  d) 5  e) 何れでもない
+            </div>
+            <div class="citation">,</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】誤っているものはどれか (2023年 問24)</h4>
+            <div class="options-vertical">
+                1. 脊髄小脳の中間部は四肢の筋の活動調節に関与する。<br>
+                2. 顆粒細胞は唯一のグルタミン作動性ニューロンである。<br>
+                3. 小脳においてプルキンエ細胞は唯一の出力細胞である。<br>
+                4. 小脳の損傷による運動障害は、小脳損傷と対側に現れる。<br>
+                5. 大脳小脳は、複数の関節が関与する複雑な運動、細かな器用さを必要とする動作のために重要であり、 体のありとあらゆる部分の協調を調節する。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問23)</h3>
+        <div class="options-vertical">
+            1． プルキンエ細胞と接続している平行細胞は強力なシナプスを形成する<br>
+            2． 小脳の星状細胞は GABA 作動性ニューロンである<br>
+            3． プルキンエ細胞は小脳皮質の唯一の出力細胞である<br>
+            4． プルキンエ細胞は抑制性の GABA 作動性ニューロンである<br>
+            5． 小脳は眼球運動、四肢の随意運動、身体の平衡感覚に関与していない
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">,</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問23)</h4>
+            <div class="options-vertical">
+                １） 一本の平行細胞は一つのプルキンエ細胞と接続しているが、強力なシナプスを形成する<br>
+                ２） 星状細胞は GABA 作動性ニューロンである<br>
+                ３） 小脳においてプルキンエ細胞は唯一の出力細胞である<br>
+                ４） プルキンエ細胞は GABA 作動性ニューロンである<br>
+                ５） 小脳は眼球運動、四肢の随意運動、体の平衡感覚に関与している
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切なものをすべて選べ (2023年 問23)</h4>
+            <div class="options-vertical">
+                1. 顆粒細胞の軸索である平行繊維はプルキンエ細胞に単一のシナプスを形成する<br>
+                2. プルキンエ細胞は 2 本の登上繊維の入力を受ける<br>
+                3. 小脳皮質から小脳核への唯一の出力はプルキンエ細胞である<br>
+                4. プルキンエ細胞の出力の神経伝達物質はγ-アミノ酪酸である<br>
+                5. プルキンエ細胞の複雑スパイクは、Ca2+スパイクによるバーストスパイクである
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+            </div>
+            <div class="citation">,</div>
+        </div>
+    </div>
+
+
+    <!-- 分野13: 視床・視床下部 -->
+    <h2>[視床・視床下部]</h2>
+
+    <div class="question-block">
+        <h3>【問】視床の構造と機能 (2023年 問25, 問26)</h3>
+        <!-- 2025/2024には独立した視床の設問が見当たらないため、2023年を本題として表示 -->
+        <h4>問 25. 最も適切なものを選べ</h4>
+        <div class="options-vertical">
+            1. 視床から大脳皮質への興奮性入力は対側性である。<br>
+            2. 後外側腹側核(VPL)の中継ニューロンは主に 1次体性感覚野の第 5 層に投射する。<br>
+            3. 背内側核(MD)は主に前頭前野から興奮性入力を受ける。<br>
+            4. 1 次聴覚野からは外側膝状体(LG)に投射する。<br>
+            5. 髄板内核群は 1 次体性感覚野に投射する。
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">,</div>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <h4>問 26. 最も適切なものを選べ</h4>
+        <div class="options-vertical">
+            1. 大脳皮質の広い領域に投射する核を非特異核という。<br>
+            2. 特殊核の中継ニューロンは大脳皮質第４層に興奮性の入力を与える。<br>
+            3. 感覚性特殊核は一次感覚野第６層に興奮性の調節入力を受ける。<br>
+            4. 後外側核はおもに頭頂連合野から興奮性の駆動力を受ける。<br>
+            5. 視床網様核は抑制性ニューロンから構成される。
+        </div>
+        <div class="options-horizontal">
+            a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+        </div>
+        <div class="citation"></div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問24)</h3>
+        <div class="options-vertical">
+            1． 視床下部は、外側野、内側野、脳室周囲帯に分類される<br>
+            2． 光による体内時計のリズムに関するメラノプシンは、網膜の双極細胞に存在する<br>
+            3． 大細胞性神経分泌細胞から、オキシトシンとバソプレシンが血中に分必される<br>
+            4． アンジオテンシン II は腎臓と血管に直接作用し、血圧の上昇を引き起こす<br>
+            5． ノルアドレナリンは、橋の青斑核のニューロンから分泌される
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問24)</h4>
+            <div class="options-vertical">
+                １） 視床下部は、外側野、内側野、脳室周囲帯に機能別に分類される<br>
+                ２） 光により体内時計のリズムに関するメラノプシンは、網膜の双極細胞に存在する<br>
+                ３） 巨細胞性神経分泌細胞から、オキシトシンとバソプレシンが血中に分泌される<br>
+                ４） アンジオテンシン II は腎臓と血管に直接作用し、血圧の上昇を引き起こす<br>
+                ５） ノルアドレナリンは、橋の青斑核のニューロンから分泌される
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問25)</h3>
+        <div class="options-vertical">
+            1． 視床下部には生物時計として機能する視交叉上核（SCN）がある<br>
+            2． 大細胞性神経分泌細胞は下垂体茎を下垂体前葉に伸ばす<br>
+            3． バソプレシンは抗利尿ホルモンとも呼ばれ、適正な血液量と塩分濃度を保つように働く<br>
+            4． 下垂体前葉は小細胞性神経分泌細胞と呼ばれる脳室周囲帯のニューロンに支配される<br>
+            5． ストレスがあると小細胞性神経分泌細胞はコルチコトロピン放出ホルモン（CRH）を下垂体門脈循環に放出する
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation">,</div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問25)</h4>
+            <div class="options-vertical">
+                １） 概日リズムの形成には、時計遺伝子によるポジティブフィードバック機構が重要である<br>
+                ２） オキシトシンは子宮を収縮させ、新生児の娩出を促進する<br>
+                ３） アンジオテンシンⅡは血液脳関門を欠く脳弓下器官で検出される<br>
+                ４） セロトニンを含むニューロンは縫線核群に集まっている<br>
+                ５） 黒質のドーパミン含有細胞の変性では、パーキンソン病の運動障害が起こる
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】体温調節について最も適切なのはどれか (2023年 問27)</h4>
+            <div class="options-vertical">
+                1. 視床下部の視索前野、前視床下野、後視床下野は体温調節中枢である<br>
+                2. 体温調節中枢の温ニューロンと冷ニューロンは核心(脳)温をモニターしている<br>
+                3. 核心温が体温のセットポイントより低いと温ニューロンが活動する<br>
+                4. 温ニューロンが働くと産熱により体温を上昇させる<br>
+                5. 温ニューロンと冷ニューロンには皮膚の温受容器、冷受容器からの入力がある
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問26)</h3>
+        <div class="options-vertical">
+            1． 脂肪細胞から放出されるレプチンは食欲を抑制する<br>
+            2． 視床下部外側の両側性の損傷は肥満と過食を引き起こす<br>
+            3． レプチンレベルの減少は、弓状核の αMSH ニューロンと CART ニューロンを刺激する<br>
+            4． NPY と AgRP は摂食促進ペプチドと呼ばれ、食欲を増幅させる<br>
+            5． 視床下部のバソプレシン分泌ニューロンが選択的に失われると尿崩症になる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問26)</h4>
+            <div class="options-vertical">
+                １） 脂肪細胞から放出されるレプチンは、視床下部ニューロンに直接作用することで食欲を抑える<br>
+                ２） 視床下部外側の両側性の損傷は、過食と肥満を引き起こす<br>
+                ３） レプチンレベルの低下は、弓状核の、αMSH ニューロンと CART ニューロンを刺激する<br>
+                ４） NPY と AgRP は摂食促進ペプチドとよばれ、食欲を増幅させる<br>
+                ５） 視床下部のバソプレシン分泌ニューロンが選択的に失われると尿崩症になる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものはどれか (2023年 問28)</h4>
+            <div class="options-vertical">
+                1. 腹内側核を電気的に刺激すると満腹感を惹起する。<br>
+                2. 外側野の神経活動を抑制する血中物質としてブドウ糖とインシュリンがある。<br>
+                3. 脂肪細胞が分泌するレプチンは外側野の神経活動を抑制し、腹内側核の神経活動を促進する。<br>
+                4. 食後に胃から分泌されるグレリンは食欲抑制に働く。<br>
+                5. 弓状核はレプチンやグレリンに反応し外側野の神経活動に相反的に関与する。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問27)</h3>
+        <div class="options-vertical">
+            1． 視床下部の腹内側の両側性の損傷は過食と肥満を引き起こす<br>
+            2． 脂肪組織から分泌されるレプチンは弓状核ニューロンのレプチン受容体を刺激する<br>
+            3． 腹内側核を電気刺激すると、満腹感を惹起する<br>
+            4． αMSH、CART を脳に注射すると、レプチンレベルが高いときと同じ反応を示す<br>
+            5． レプチンレベルの低下は弓状核の NPY、AgRP ニューロンを刺激する
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,4,5 c) 2,3,5 d) 1,2,4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問27)</h4>
+            <div class="options-vertical">
+                １） 視床下部腹内側の損傷によって引き起こされる食欲不振は視床下部腹内側症候群とよばれる<br>
+                ２） レプチンは、視床下部腹内側の神経活動を抑制し、視床下部外側野の神経活動を促進する<br>
+                ３） エネルギーバランスに対する AgRP とαMSH の作用は、拮抗的である<br>
+                ４） オレキシンは摂食促進ペプチドである<br>
+                ５） αMSH と CART は摂食促進ペプチドである
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野15: 大脳基底核 -->
+    <h2>[大脳基底核]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問28)</h3>
+        <div class="options-vertical">
+            1． 大脳基底核で処理された情報の大部分は、視床を介して大脳皮質へと戻る<br>
+            2． ドーパミンは線条体の直接路ニューロンを介して、D1 群受容体を抑制性に作用する<br>
+            3． サルにサッケード運動をさせると、サッケード運動に先行して黒質網様体の GABA ニューロンの活動を停止する<br>
+            4． 線条体は手続き記憶に関わる<br>
+            5． 線条体の D2 群受容体を発現する投射ニューロンを活性化させると、マウスの移動量が減少する
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問28)</h4>
+            <div class="options-vertical">
+                １） 線条体ニューロンから間接路への出力が亢進するとパーキンソン病になる<br>
+                ２） 報酬系では無条件刺激と条件刺激で記憶が異なる<br>
+                ３） サルの大脳基底核に GABAA受容体の拮抗薬を注入するとサッケード運動を繰り返す<br>
+                ４） 淡蒼球内節、黒質網様部は自発的に高頻度で発火している<br>
+                ５） ジストニアでは痙攣が特徴である
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切なものを選べ (2023年 問29)</h4>
+            <div class="options-vertical">
+                1. サルの黒質網様部にGABA受容体作動薬を注入するとサッケード運動を繰り返し示す<br>
+                2. 間接路ニューロンのニューロンに、チャネルロドプシンを発現させ、青色光ビームを照射すると、運動が促進される<br>
+                3. 線条体は手続き記憶に関わる<br>
+                4. 淡蒼球內節、黒質網様部は自発的に高頻度で発射している<br>
+                5. ハイパー直接路は淡蒼球內節、黒質網様部を興奮させる
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問29)</h3>
+        <div class="options-vertical">
+            1． 視床下核－淡蒼球の間接路は淡蒼球内節に広く投射する<br>
+            2． ヘミバリスムは視床下核の破壊による<br>
+            3． パーキンソン病は黒質緻密部のドーパミン性ニューロンの脱落による<br>
+            4． ハンチントン病は視床下核のニューロンの活動が亢進される<br>
+            5． ドーパミン作動性ニューロンではドーパミン作動性の学習をさせると実際と予測の報酬の差を計測できる
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,4,5 c) 2,3,5 d) 1,2,4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問29)</h4>
+            <div class="options-vertical">
+                １） ハンチントン病は線条体から淡蒼球外節に投射するニューロンが変性することによる<br>
+                ２） 淡蒼球から線条体への枝はグルタミン酸作動性ニューロンによる<br>
+                ３） 大脳基底核の障害により弛緩麻痺が引き起こされる<br>
+                ４） ハイパー直接路は淡蒼球および黒色網様部を抑制する<br>
+                ５） 線条体のドーパミン D1 受容体によりニューロンが活性化することでマウスの移動が増えた
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation">,</div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】正しいものを選べ (2023年 問30)</h4>
+            <div class="options-vertical">
+                1. パーキンソン病では線条体からの間接路の出力が亢進している<br>
+                2. ジストニアでは直接路、間接路ともに活動性が亢進している。<br>
+                3. ハンチントン病では、淡蒼球内節・黒質網様部ニューロンの活動が減弱する。<br>
+                4. パーキンソン病では、黒質緻密部のドーパミン作動性ニューロンが脱落している。<br>
+                5. サルの視床下核を破壊すると、ヘミバリスムが起きる。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation">,</div>
+        </div>
+    </div>
+
+    <!-- 分野16: 大脳辺縁系 -->
+    <h2>[大脳辺縁系]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問30)</h3>
+        <div class="options-vertical">
+            1． オペラント条件付けにおいて、無条件報酬が罰であった場合、その行動を起こす確率は低くなる<br>
+            2． 扁桃体の破壊によって条件付け情動反応が起こらなくなる<br>
+            3． 非陳述記憶とはピアノの演奏や自転車を漕ぐといった行為に関連付けた記憶である<br>
+            4． 海馬を障害すると子供の頃の記憶を失う<br>
+            5． 腹側被蓋のドーパミンニューロンは側坐核、扁桃体、前頭前野と中隔核でドーパミンを放出して快楽をもたらす
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 3,4 d) 4 のみ e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問30)</h4>
+            <div class="options-vertical">
+                １） 連合学習には慣れや鋭敏化がある<br>
+                ２） CA1 の神経細胞の NMDA 受容体を欠損させたマウスではモリスの水迷路学習での脱出までの時間が短くなる<br>
+                ３） 前向性健忘では障害前の記憶は問題ない<br>
+                ４） コルサコフ症患者は遅延図形再生課題ができない<br>
+                ５） クリューバービュッシー症候群では性行動の亢進が見られる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問31)</h3>
+        <div class="options-vertical">
+            1． 運合学習には慣れや鋭敏化がある<br>
+            2． CA1 の神経細胞の NMDA 受容体を欠損させたマウスではモリスの水迷路学習での脱出までの時間が短くなる<br>
+            3． 前向性健忘では障害前の記憶は問題ない<br>
+            4． コルサコフ症患者は遅延図形再生課題ができない<br>
+            5． クリューバービュッシー症候群では性行動の亢進が見られる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問31)</h4>
+            <div class="options-vertical">
+                １） 連想ゲームの前に果物の話をすると、赤いという単語から林檎や苺を思い浮かべるのが、古典的条件付けである<br>
+                ２） 海馬 Ca3 の錐体細胞のシャッファー側枝を電気刺激すると、Ca1 錐体細胞に興奮性シナプス後電位が発生する<br>
+                ３） 側頭葉内側部を切除した H・M さんの数字暗唱能力は正常であった<br>
+                ４） ネコの扁桃体を刺激すると、情動反応が引き起こされた<br>
+                ５） シャッハー側枝を高頻度刺激すると、AMPA グルタミン酸チャネルの Mg⁺ブロックが脱落した
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものはどれか (2023年 問31)</h4>
+            <div class="options-vertical">
+                1. 側頭葉内側部を切除する手術を受けた H.M.さんは非陳述記憶を失った<br>
+                2. AMPA 型グルタミン酸受容体は Mg2＋のブロックを受けている。<br>
+                3. CA1 の神経細胞のNMDA 受容体を欠損させたマウスでは長期増強、学習、記憶が障害される<br>
+                4. 慣れには刺激特異性がある<br>
+                5. 条件刺激において無条件刺激が報酬の場合、行動の確率が上がる。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問32)</h4>
+            <div class="options-vertical">
+                1. 恐怖条件づけ後のラットに条件刺激を呈示しただけで血圧と副腎皮質ホルモンの上昇が見られる<br>
+                2. ネコの分界条床核の刺激によって、うなり声に続いてヒッシングが起こる<br>
+                3. クリューバービュッシー症候群では精神盲が見られる<br>
+                4. クリューバービュッシー症候群では性行動の低下が見られる<br>
+                5. 扁桃体の破壊によって条件づけ情動反応が起こらなくなる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野17: 大脳皮質 -->
+    <h2>[大脳皮質]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問32)</h3>
+        <div class="options-vertical">
+            1． 大脳皮質は新皮質、古皮質、原皮質で構成される<br>
+            2． 大脳皮質を構成するニューロンのうち、10〜30%が興奮性の GABA ニューロンで無棘性あるいは棘突起が少ない樹状突起をもつ<br>
+            3． 大脳皮質の腹内側経路は遠位筋の随意運動に関わり、大脳皮質から直接的な制御を受けている<br>
+            4． 6 野は運動前野と呼ばれる外側領域と補足運動野と呼ばれる内側領域が存在する
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,4 c) 2,3 d) 2,4 e) 3,4
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問32)</h4>
+            <div class="options-vertical">
+                １） 大脳皮質は新皮質、古皮質、原皮質に分けられる<br>
+                ２） 第 2/3 層が視床に入力する<br>
+                ３） 第 5 層は Betz の錐体細胞ニューロンがある<br>
+                ４） 赤核からの軸索は橋で交差せず脊髄の側索にある皮質脊髄路に合流する
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 4  c) 2, 3  d) 2, 4  e) 3, 4
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問33)</h4>
+            <div class="options-vertical">
+                １） 大脳皮質は視床核をもち、興奮性にフィードフォワード出力する<br>
+                ２） 大脳皮質の構成ニューロンのうち 10〜30%が興奮性のグルタミン酸作動性ニューロンで無棘性あるいは棘突起が少ない樹状突起を持つ<br>
+                ３） 腹内側経路は遠位筋の随意運動に関わり大脳皮質から直接的な制御を受ける<br>
+                ４） 6 野には運動前野と呼ばれる外側領域と補足運動野と呼ばれる内側領域が存在する
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1. 3  c) 1, 4  d) 2, 3  e) 2, 4
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問33)</h3>
+        <div class="options-vertical">
+            1． 大脳皮質ニューロンは興奮性神経伝達物質として GABA を用いる<br>
+            2． 大脳皮質の第Ⅵ層の錐体ニューロンは皮質下の視床核へ出力する<br>
+            3． 大脳皮質の構成ニューロンのうち、70-90%は抑制性介在ニューロンが占める<br>
+            4． 視蓋脊髄路は網膜からの刺激が上丘へ伝わり、定位運動に関わる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,3, c) 2,3 d) 2,4 e) 3,4
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】大脳皮質(感覚系)・適切なものはどれか (2023年 問33)</h4>
+            <div class="options-vertical">
+                1. 体性感覚野の細胞の特徴の 1 つに、反応選択性(特定の形、動きなど)がある<br>
+                2. 体性感覚野へは運動野から運動命令コピーが入力する<br>
+                3. 体性感覚情報は S I で処理されるものと S II で処理されるものに大別される<br>
+                4. 体性感覚野の体部位再現の⾯積比は、代表⾯積のそれとほぼ等しい<br>
+                5. バレル構造は細胞集団が 1つの機能を共同で行う機能ユニットである
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3 b) 1, 2, 5 c) 1, 4, 5 d) 2, 3, 4 e) 3, 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問34)</h3>
+        <div class="options-vertical">
+            1． 大脳皮質の第Ⅴ層には大型の錐体ニューロンが存在する<br>
+            2． ヒトの脳で言語機能と論理的思考は右脳が担当する<br>
+            3． 中枢運動系は階層化されており、高位が大脳皮質連合野と大脳基底核、中位が大脳皮質運動野と小脳、下位が脳幹と脊髄である<br>
+            4． 皮質脊髄路は中枢神経系で最も大きい神経経路で、大脳皮質連合野から遠位筋へ向かう運動神経の束である
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問34)</h4>
+            <div class="options-vertical">
+                １） 大脳皮質の第Ⅴ層には大型の錐体ニューロンが存在する<br>
+                ２） ヒトの脳で言語機能と論理的思考は右脳が担当する<br>
+                ３） 中枢運動系は階層化されており、高位が大脳皮質連合野と大脳基底核、中位が大脳皮質運動野と小脳、下位が脳幹と脊髄である<br>
+                ４） 皮質脊髄路は中枢神経系で最も大きい神経経路で、大脳皮質連合野から遠位筋へ向かう運動神経の束である
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問35)</h3>
+        <div class="options-vertical">
+            1． ヒトの脳では図形処理と直感的思考は右脳で行われる<br>
+            2． 言語中枢の 90%は左脳で行われる<br>
+            3． 脊髄下行路で腹内側路は姿勢と歩行の制御に関わる<br>
+            4． 腹内側路は近位筋と体幹筋を制御し、前庭脊髄路、視蓋脊髄路、橋網様体脊髄路、延髄網様体脊髄路を含んでいる
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 2,3 c) 3,4 d) 4 のみ e) 全て
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問35)</h4>
+            <div class="options-vertical">
+                １） 脊髄下行路の外側経路は脊髄皮質路と赤核脊髄路からなる<br>
+                ２） 脊髄皮質ニューロンは主に大脳皮質の第Ⅱ層に存在する<br>
+                ３） fMRI や PET は神経活動によって調節される血流や代謝の変化に反応する<br>
+                ４） 前頭前野は大脳皮質第Ⅵ層に軸索を出す
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1. 3  c) 2, 3  d) 2, 4  e) 3, 4
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】大脳皮質(運動系)・正しいものはどれか (2023年 問35)</h4>
+            <div class="options-vertical">
+                1. 運動野は 4 野であり、運動力の調節、ある程度のまとまった運動をなす<br>
+                2. 運動野の II、III の錐体細胞は、他の皮質領域や対側皮質に投射する<br>
+                3. 運動野には体性感覚野や連合頭頂野からの入力がある<br>
+                4. 補足運動野は、複雑なプログラム運動をあらかじめ作成・保存に関与する<br>
+                5. 運動前野は体性感覚からの情報に基づいた運動プログラムの制御をする
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野18: 睡眠・覚醒 -->
+    <h2>[睡眠・覚醒]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問36)</h3>
+        <div class="options-vertical">
+            1． レム睡眠中の人を起こすと夢を見ていたと言うことが多い<br>
+            2． 睡眠は記憶の固定化に関わる<br>
+            3． 明け方になるにつれレム睡眠が長くなる<br>
+            4． 徐波睡眠のステージ 4 ではθ波がみられる<br>
+            5． オレキシンニューロンの欠落がナルコレプシーの原因である
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4 のみ e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問36)</h4>
+            <div class="options-vertical">
+                １） レム睡眠中には脊髄の運動ニューロンが強力に抑制される<br>
+                ２） レム睡眠中、脳波は短振幅波である<br>
+                ３） 加齢に伴い、除波睡眠が短くなる<br>
+                ４） 縫線核の刺激で睡眠が起こる<br>
+                ５） 脳内にアデノシンを投与すると、睡眠が誘導される
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なものはどれか (2023年 問37)</h4>
+            <div class="options-vertical">
+                1. REM睡眠では骨格筋の筋緊張の消失がみられる。<br>
+                2. 徐波睡眠のステージ 2では紡錘波と K 複合波が出現する。<br>
+                3. 明け方になるにつれて REM 睡眠が長くなる。<br>
+                4. 睡眠は記憶の固定化に重要である。<br>
+                5. 徐波睡眠のステージ 1ではθ波が表れる。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問37)</h3>
+        <div class="options-vertical">
+            1． 睡眠を剥奪されたラットは体重が増加する<br>
+            2． 入眠初期は徐波睡眠から始まり、その後 REM 睡眠になる<br>
+            3． ノルアドレナリンニューロンの活動は睡眠時に高い<br>
+            4． アセチルコリンニューロンの活動により脳波が同期化される<br>
+            5． 寝る直前に運動学習課題をすると、活動していた大脳皮質領域で徐波活動が増加する
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4 のみ e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問37)</h4>
+            <div class="options-vertical">
+                １） 睡眠を剥奪されたラットは体重が増加する<br>
+                ２） 入眠初期は徐波睡眠から始まり、その後 REM 睡眠になる<br>
+                ３） ノルアドレナリンニューロンの活動は睡眠時に高い<br>
+                ４） アセチルコリンニューロンの活動により脳波が同期化される<br>
+                ５） 光は同調因子として働き概日リズムを 24 時間周期に同調させる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問38)</h4>
+            <div class="options-vertical">
+                1. ノルアドレナリンニューロンの活動は睡眠時に高い。<br>
+                2. ナルコレプシー患者では情動により抗重力筋の緊張が低下する睡眠麻痺が見られる。<br>
+                3. 加齢に伴い、ステージ 3.4 の睡眠の割合が減る。<br>
+                4. アセチルコリンニューロンの活動により脳波が非同期化する。<br>
+                5. メラノプシンが光を検出し、眼球からの情報が視交叉上核に伝えられる。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野19: 連合野 -->
+    <h2>[連合野]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問38)</h3>
+        <div class="options-vertical">
+            1． 広義の連合野とは､運動野と感覚野を除く部位で、最上位に位置する大脳皮質で様々な感覚を統合し､いわゆる高次機能を司る領域である<br>
+            2． 連合野は細胞構築上､6 層の均等な層構造を形成している<br>
+            3． 連合野が障害されると四肢麻痺がおこる<br>
+            4． ボトムアップとは下位の感覚野から上位の感覚野、またはさらに高度な情報処理を行う連合野への投射である<br>
+            5． トップダウンとは上位の中枢神経から下位の中枢神経への情報の流れである
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問38)</h4>
+            <div class="options-vertical">
+                １） 広義の連合野とは、運動野と感覚野を除く部位で、最上位に位置する大脳皮質で様々な感覚を統合し、いわゆる高次機能を司る領域である<br>
+                ２） 連合野は細胞構築上、6 層の均等な層構造を形成している<br>
+                ３） 連合野が障害されると四肢麻痺がおこる<br>
+                ４） ボトムアップとは下位の感覚野から上位の感覚野、またはさらに高度な情報処理を行う連合野への投射である<br>
+                ５） トップダウンとは上位の中枢神経から下位の中枢神経への情報の流れである
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問39)</h3>
+        <div class="options-vertical">
+            1． 後頭葉の視覚連合野(18 野、19 野)は単感覚連合野である<br>
+            2． 頭頂連合野は多感覚連合野である<br>
+            3． 頭頂連合野には対象物の奥行き、遠近や動きのみを認識する細胞がある<br>
+            4． 右側頭頂連合野の損傷によって左半空間無視が生じる<br>
+            5． 左側頭頂連合野の損傷によって手指失行や手指失認がおこる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,3 b) 4 c) 5 d) 4,5 e) 何でもない
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問39)</h4>
+            <div class="options-vertical">
+                １） 後頭葉の視覚野（18 野、19 野）は単感覚連合野である<br>
+                ２） 頭頂連合野は多感覚連合野である<br>
+                ３） 頭頂連合野には物体の奥行き、遠近、動きなどを認識するだけの細胞がある<br>
+                ４） 左側頭頂連合野の障害によって右側空間無視が起こる<br>
+                ５） 右側頭頂連合野の障害によって手指失認と手指失行が起こる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 4 のみ  c) 5 のみ  d) 4, 5  e) 何れでもない
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問40)</h3>
+        <div class="options-vertical">
+            1． 大脳皮質の弓状束が障害されると、言葉の復唱ができなくなる<br>
+            2． 角回が障害されると左右失認が起こる<br>
+            3． 脳梁離断手術により拮抗性失認が起こる<br>
+            4． 脳梁離断手術により、右手で文字が書けなくなる<br>
+            5． ウェルニッケの感覚性言語野が障害されると聞いた言葉の理解ができなくなる
+        </div>
+        <div class="options-horizontal">
+            a) 1 b) 2 c) 3 d) 4 e) 5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問40)</h4>
+            <div class="options-vertical">
+                １） 前頭野切除後は計画的な行動ができなくなる<br>
+                ２） 前頭前野の損傷により人格が変わる<br>
+                ３） 90％の人では左半球が言語中枢を担っている<br>
+                ４） 前頭前野の損傷がある人はウィスコンシン・カード分類課題ができない<br>
+                ５） 前頭前野は記憶の固定化に重要である
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なものを選べ (2023年 問42)</h4>
+            <div class="options-vertical">
+                1. ブローカ失語で、内容語は言えても機能語は使えないので構文の発話ができない。<br>
+                2. 単語 1 語の発音ではブローカ野はあまり賦活されない。<br>
+                3. ウェルニッケ野は単語認識に関係し、単語の意味に対応する連合野の記憶を賦活する。<br>
+                4. ウェルニッケ失語では文法、構文などは比較的保たれる。<br>
+                5. 声色を変えるなど、言語に感情を反映させるのは左脳である。
+            </div>
+            <div class="options-horizontal">
+                a) 1 b) 2 c) 3 d) 4 e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問41)</h3>
+        <div class="options-vertical">
+            1． 前頭葉切断術を受けると、計画的に物事を進めることができなくなる<br>
+            2． 言語中枢は、約 90％のヒトで左半球にある<br>
+            3． 前頭前野の損傷がある人はウィスコンシン・カード分類課題ができない<br>
+            4． 角回やその周辺を損傷したときの症状はゲルストマン症候群である<br>
+            5． 作業記憶を実行している間は、前頭葉の活動が活発化する
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2 c) 2,3 d) 4,5 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問41)</h4>
+            <div class="options-vertical">
+                １） 前頭前野の損傷により順序だった行動の組み立てができなくなる<br>
+                ２） 脳梁離断では左視野の情報を呼称はできないが、右手で掴むことができる<br>
+                ３） ブローカ失語では、内容語は言えても機能語は使えないので構文の発話ができない<br>
+                ４） 暗算などに関係する作業記憶は前頭前野に深く関わる<br>
+                ５） 前頭葉破壊のサルでは遅延反応課題を遂行できなくなる
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野20: 神経科学研究の最前線・その他 -->
+    <h2>[神経科学研究の最前線・その他]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問42)</h3>
+        <div class="options-vertical">
+            1． 時計遺伝子は最初、ショウジョウバエの研究から見つかった<br>
+            2． カプサイシンの受容体 TRPV1 は、初めての温度センサーとして同定された<br>
+            3． PIEZO2 は皮膚触覚を担うメカノセンサーチャネルである<br>
+            4． 場所細胞は、動物が特定の場所を通過する際に選択的に発火する細胞である<br>
+            5． 神経栄養因子とは、神経細胞の生存、樹状突起や軸索の進展、シナプスの形成など多岐にわたる
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問42)</h4>
+            <div class="options-vertical">
+                １） 食虫類に比べて、霊長類では海馬が良く発達している<br>
+                ２） 他の哺乳動物に比べて、ヒトでは前頭連合野の肥大が見られる<br>
+                ３） 大脳のシワ（脳回）形成において、大脳白質からのアストロサイトの産生が重要である<br>
+                ４） 滑脳症では、大脳において、小さな脳回が過剰に形成される<br>
+                ５） 多小脳回症では、大脳において脳回形成がなくなる、あるいは少なくなる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】細胞内 Cl-と神経回路ダイナミクス (2023年 問43, 問44)</h4>
+            <div class="options-vertical">
+                <b>問43. 最も不適切なものを選べ</b><br>
+                1. 神経細胞の細胞内 Cl-濃度の調節は、主に KCC2 と NKCC1 が関与する<br>
+                2. NKCC1 は、K+の内向きの電気化学勾配を利用して、Cl-を取り込む<br>
+                3. KCC2 は、K+の外向きの電気化学勾配を利用して、Cl-を排出する<br>
+                4. 未熟な脳の NKCC1 の高発現は新生児のてんかんの原因の一である<br>
+                5. GABA が活性を示すのはシナプスが形成されて以降である<br>
+                <br>
+                <b>問44. 最も適当なものを選べ</b><br>
+                1. 神経細胞の Cl-の電気勾配と化学勾配は一般的な状態では逆方向である<br>
+                2. GABAの作用は細胞内 Cl-濃度が多少変わっても安定である<br>
+                3. GABA反応の電位変化にその時の静止膜電位はあまり関与しない<br>
+                4. 細胞内 Cl-濃度は主にGABAA受容体-Cl-チャネルによってホメオスタシスが保たれている<br>
+                5. GABAA受容体-Cl-チャネルからの過激な Cl-流入では、GABA 作用の抑制から興奮への逆転は説明できない
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野21: 実習（神経） -->
+    <h2>[実習：神経]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問43)</h3>
+        <div class="options-vertical">
+            1． 峰わかれは伝導速度の異なる神経線維群があることで観察される<br>
+            2． 活動電位は刺激電極の陰極側で発生する<br>
+            3． 刺激電極によるの活動電位は両方向に伝導する<br>
+            4． 相対不応期には複合活動電位を発生される刺激の閾値が高くなる<br>
+            5． 刺激時間を短くすると複合活動電位を発生させる閾値は高くなった
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問46)</h4>
+            <div class="options-vertical">
+                １） 峰わかれは伝導速度の異なる神経線維群があることで観察される<br>
+                ２） 活動電位は刺激電極の陽極側で発生する<br>
+                ３） 相対不応期には複合活動電位を発生させる刺激の閾値が高くなる<br>
+                ４） 刺激電極による活動電位は両方向に伝導する<br>
+                ５） 刺激時間を短くすると複合活動電位を発生させる閾値は高くなった
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問44)</h3>
+        <div class="options-vertical">
+            1． 入れた刺激の強さは、増幅器で増幅して記録した<br>
+            2． 有髄神経は無髄神経より伝導速度が遅い<br>
+            3． 刺激電極の陰極と陽極を入れかえても複合活動電位は変化しない<br>
+            4． 神経筋標本の作成の際、坐骨神経が出している神経枝をハサミで切断すると活動電位が発生した<br>
+            5． 電気ピンセットで坐骨神経を刺激すると活動電位が発生した
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なのはどれか (2024年 問43)</h4>
+            <div class="options-vertical">
+                １） 伝導速度は刺激電極陽極から刺激電極陰極までの距離で測る<br>
+                ２） 無髄神経より有髄神経の方が伝導速度が遅い<br>
+                ３） カエルの標本は乾燥を防ぐために水道水につけた<br>
+                ４） 標本作製の際、脊髄を破壊すると支配筋が収縮する<br>
+                ５） 刺激時間を長くすると閾値が徐々に一定になってくる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 5  c) 2, 3  d) 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問44)</h4>
+            <div class="options-vertical">
+                １） 刺激の間隔を短くすると複合活動電位の閾値が低くなる<br>
+                ２） 刺激電極の陰極と陽極を入れ替えると、複合活動電位の振幅は小さくなる<br>
+                ３） 峰別れは記録電極と活動電極の距離を遠ざけるとよく観察される<br>
+                ４） artifact は活動電位より長い潜時で記録される<br>
+                ５） 刺激電極の陰極と陽極を入れ替えると、複合活動電位の立ち上がりが早くなる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 3  b) 1, 2, 5  c) 1, 4, 5  d) 2, 3, 4  e) 3, 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問45)</h3>
+        <div class="options-vertical">
+            1． 記録電極間の距離を伸ばすと複合活動電位の振幅は小さくなる<br>
+            2． 複合活動電位は all-or-none の法則に従う<br>
+            3． 相対不応期には、すべての Na +チャネルが開いている<br>
+            4． 刺激強度を強くすると、峰別れが生じやすい<br>
+            5． 神経筋標本を作る時は神経を引っ張らないように注意した
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問45)</h4>
+            <div class="options-vertical">
+                １） 刺激強度を上げると峰わかれが生じやすい<br>
+                ２） 最大刺激以上の刺激を行っても、相対不応期があるため、複合活動電位の振幅は増大しない<br>
+                ３） 記録電極の陽極と陰極の間を挫滅すると複合活動電位の波形は二相性になる<br>
+                ４） 絶対不応期では神経繊維のすべての Na+チャネルが不活性化している<br>
+                ５） 神経束を挫滅しても artifact は変化しない
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 1, 2  c) 2, 3  d) 4 のみ  e) 何れでもない
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】最も不適切なのはどれか (2025年 問46)</h3>
+        <div class="options-vertical">
+            1． 複合活動電位を計測する際、刺激電極陽極から記録電極陰極までの距離で行った<br>
+            2． 峰を生じる活動電位を発生させる神経の伝導速度は速い<br>
+            3． カエルの標本はリンゲル液につけておいた<br>
+            4． 標本作成の際に脊髄に針を刺し脊髄を破壊すると活動電位が生じた<br>
+            5． 刺激電極の陰極と陽極を逆転させて刺激強度を上げると、振幅が大きくなった
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,5 c) 2,3 d) 3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も適切なものはどれか (2023年 問45)</h4>
+            <div class="options-vertical">
+                1. 刺激の強さをあげていくと一本一本の神経繊維の活動電位の振幅が大きくなる。<br>
+                2. 標本作製の際、脊髄を破壊すると支配筋が収縮する。<br>
+                3. 刺激電極の陰極で発生する活動電位は両方向へ伝導する。<br>
+                4. 刺激電極の陽極と陰極を入れ替えても複合活動電位の振幅は変わらない。<br>
+                5. リンゲル溶液は細胞外液の組成と近い。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4 b) 1, 2 c) 2, 3 d) 4 のみ e) 全て
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野22: 実習（脳波・自発） -->
+    <h2>[実習：脳波(自発)]</h2>
+
+    <div class="question-block">
+        <h3>【問】最も適切なのはどれか (2025年 問47)</h3>
+        <div class="options-vertical">
+            1． β波は速波であり、θ波は徐波である<br>
+            2． 電極を貼り付ける際、頭皮の汚れを落とすことが重要である<br>
+            3． 耳朶を基準電位として、脳波電圧を測定する方法を基準導出法という<br>
+            4． 眼球運動やまばたきは脳波に影響がある<br>
+            5． 漸増漸減が最も顕著に見られるのは、α波である
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 1,2,4,5 c) 2,3,5 d) 4 のみ e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】最も不適切なのはどれか (2024年 問48)</h4>
+            <div class="options-vertical">
+                １） 脳波は大脳皮質の活動電位の記録である<br>
+                ２） 実習ではアースを左耳介につけた<br>
+                ３） θ波の活動電位は約 2Hz 程度である<br>
+                ４） 大脳皮質の活動は視床ニューロンの周期的な発火による<br>
+                ５） 皮質ニューロン同期性がと振幅も小さくなる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 3, 4  b) 2,3  c) 2, 3, 4, 5  d) 3, 4, 5  e) すべて
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】誤ってるものを答えよ (2023年 問49)</h4>
+            <div class="options-vertical">
+                1. 脳波は大脳皮質錐体細胞の活動電位を記録することでできる<br>
+                2. 漸増漸減が最も顕著に現れるのはα波である<br>
+                3. 皮質ニューロン同期性が低くなると振幅も小さくなる<br>
+                4. 自発脳波の実習ではアースを両側耳朶にとった<br>
+                5. 10-20 電極法に従うと、鼻根点と後頭結節を結んだ中点は Pz になる
+            </div>
+            <div class="options-horizontal">
+                選択肢未再現
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】自発脳波について最も適切なのはどれか (2025年 問48)</h3>
+        <div class="options-vertical">
+            1． 後頭隆起と Nasion との中点を Fz という<br>
+            2． 皮質ニューロンの同期性が高くなると、振幅が大きくなる<br>
+            3． 実習では、アースとして両側の耳につけた<br>
+            4． 周波数の低い順に並べるとδ、θ、α、β、γ波である<br>
+            5． 通常安静併願時にα波は後頭葉で最も顕著に現れる
+        </div>
+        <div class="options-horizontal">
+            a) 1,3,4 b) 2,3 c) 2,3,4,5 d) 3,4,5 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】10-20 電極法において、C3 を配置するのに必要な情報 (2024年 問47)</h4>
+            <div class="options-vertical">
+                １） Nasion - Inion - 左乳様突起 - A1<br>
+                ２） Fpz - Oz - A1 - A2<br>
+                ３） Fz - Oz - Pz - A1<br>
+                ４） Fpz - Oz - T3 - Cz<br>
+                ５） Fpz - Oz - T3 - Fz
+            </div>
+            <div class="options-horizontal">
+                a) 1  b) 2  c) 3  d) 4  e) 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】不適切なものはどれか (2023年 問50)</h4>
+            <div class="options-vertical">
+                1. 過呼吸により速波が現れる<br>
+                2. 心電図は脳波より高い増幅率を必要とする<br>
+                3. 脳波は視床や視床下部における神経活動を直接記録できる<br>
+                4. 通常安静閉眼時にα波は後頭葉で最も顕著に現れる<br>
+                5. 光刺激により 1 次視覚野に観察される脳波は光刺激の周波数に依存する
+            </div>
+            <div class="options-horizontal">
+                選択肢未再現
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+
+    <!-- 分野23: 実習（脳波・誘発） -->
+    <h2>[実習：脳波(誘発)]</h2>
+
+    <div class="question-block">
+        <h3>【問】視覚誘発電位(VEP)について最も適切なのはどれか (2025年 問49)</h3>
+        <div class="options-vertical">
+            1． 一般的に、光刺激の強さと一次視覚野誘発電位の振幅には相関がある<br>
+            2． 一般的に、光刺激による誘発電位は視覚野に対応した Oz 以外の部位でも確認できた<br>
+            3． 網膜での光情報処理は外側膝状体での処理より時間がかかる<br>
+            4． 加算平均をしても振幅は変化しない<br>
+            5． 前頭連合野には光刺激による視覚情報は伝わらない
+        </div>
+        <div class="options-horizontal">
+            a) 1,2 b) 1,2,3 c) 1,2,4 d) 2,3,4 e) 4,5
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】視覚誘発電位（VEP）について最も適切なのはどれか (2024年 問49)</h4>
+            <div class="options-vertical">
+                １） 一般的に、光刺激と一次視覚野誘発電位の振幅には相関がある<br>
+                ２） 光刺激による誘発電位は視覚野に対応した Oz 以外の部位でも観察できた<br>
+                ３） 網膜での光情報処理は外側膝状体での処理よりも時間がかかる<br>
+                ４） 加算平均をしても振幅は変化しない<br>
+                ５） 前頭連合野には光刺激による視覚情報は伝わらない
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2  b) 1, 2, 3  c) 1, 2, 3, 4  d) 2, 3, 4  e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】適当なものを選べ (2023年 問51)</h4>
+            <div class="options-vertical">
+                1. 加算平均すると誘発電位は背景電位より相対的に小さくなる。<br>
+                2. 網膜での情報処理は外側膝状体での処理にかかる時間より短い。<br>
+                3. 光強度を上げると記録される誘発電位の波形、振幅は変化する。<br>
+                4. 視覚情報は側頭連合野や頭頂連合野に送られて処理される<br>
+                5. 光刺激は一次視覚野に対応するOzでのみ処理される。
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <h3>【問】視覚誘発電位(VEP)について最も適当なのはどれか (2025年 問50)</h3>
+        <div class="options-vertical">
+            1． 同一刺激に対し、何回も再現性をもった波形が認められたら、誘発電位とみてよい<br>
+            2． LED 照射開始から、500ms で 150 回分を加算平均する<br>
+            3． 照射する色を変えても、波形は変化しない<br>
+            4． 光による刺激をしなかったとき、誘発電位は発生しない<br>
+            5． Oz で観察される誘発電位の潜時がもっとも短い
+        </div>
+        <div class="options-horizontal">
+            a) 1,2,5 b) 1,2,4,5 c) 2,3,4,5 d) 1,3,4 e) すべて
+        </div>
+        <div class="citation"></div>
+
+        <div class="similar-question">
+            <h4>【類題】体制感覚誘発電位(SEP)について最も適切なのはどれか (2024年 問50)</h4>
+            <div class="options-vertical">
+                １） 刺激電極の負極は末梢側につける<br>
+                ２） 皮膚感覚神経のほうが運動神経より閾値が低いため、痛覚が選択的に刺激される<br>
+                ３） 刺激側の指を折る運動で、体性感覚誘発電位が変化したのは体動によるノイズの影響が大きい<br>
+                ４） 体性感覚誘発電位は刺激と同側で活発に観察できる<br>
+                ５） 体性感覚誘発電位もカエルの坐骨神経の実験と同じように伝導速度を求めることができる
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2, 4  b) 1, 5  c) 3 のみ  d) 3, 5  e) 5 のみ
+            </div>
+            <div class="citation"></div>
+        </div>
+
+        <div class="similar-question">
+            <h4>【類題】体性感覚誘発電位についてあっているのはどれか？ (2023年 問52)</h4>
+            <div class="options-vertical">
+                1. 体性感覚誘発電位の脳波の振幅は自発脳波より大きい<br>
+                2. 正中神経刺激電極の陽極は中枢側に置いた<br>
+                3. 視覚誘発電位の潜時に比べて体性感覚誘発電位の潜時は短い<br>
+                4. 正中神経の電気刺激による SEPは刺激と同側の体性感覚野でも記録される場合がある<br>
+                5. 電気刺激によって運動神経は影響を受けない
+            </div>
+            <div class="options-horizontal">
+                a) 1, 2 b) 1, 5 c) 2, 3 d) 3, 4 e) 4, 5
+            </div>
+            <div class="citation"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const tocList = document.getElementById("toc-list");
+    const headings = document.querySelectorAll("h2");
+    const tocLinks = [];
+    
+    // 目次生成
+    headings.forEach((h2, i) => {
+      const id = "section-" + (i + 1);
+      h2.id = id;
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#" + id;
+      a.textContent = h2.textContent.replace("[", "").replace("]", "");
+      a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      });
+      li.appendChild(a);
+      tocList.appendChild(li);
+      tocLinks.push(a);
+    });
+    
+    // ハイライト監視
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tocLinks.forEach(link => link.classList.remove("active"));
+            const index = [...headings].indexOf(entry.target);
+            if(tocLinks[index]) {
+                tocLinks[index].classList.add("active");
+                // アクティブな項目が見えるように目次内スクロール
+                tocLinks[index].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    headings.forEach(h2 => observer.observe(h2));
+</script>
+
+</body>
+</html>

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
     /* ベース設定 */
+    html, body {
+        overflow-x: hidden;
+    }
     body {
         font-family: "Helvetica Neue", Arial, sans-serif;
         line-height: 1.6;
@@ -128,15 +131,6 @@
 
     /* スマホ・極小画面対応 */
     @media (max-width: 600px) {
-        #main-content { padding-right: 20px; }
-        /* スマホでも邪魔なら以下で目次を非表示にすることも可能 */
-        /* #toc-container { display: none; } */
-    }
-    html, body {
-        overflow-x: hidden;
-    }
-    
-    @media (max-width: 600px) {
         body {
             margin: 0; /* マージンをリセット */
             font-size: 16px; /* 明示的にベースサイズを指定 */
@@ -146,7 +140,7 @@
             max-width: 100%;
         }
         #toc-container {
-            display: none; /* スマホで縮小される最大の原因になりやすいため一時停止 */
+            display: none;
         }
     }
 </style>
@@ -2443,4 +2437,5 @@
 
 </body>
 </html>
+
 

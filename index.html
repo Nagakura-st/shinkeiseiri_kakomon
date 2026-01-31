@@ -4,25 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    * {
-        box-sizing: border-box; /* すべての要素のサイズ計算を固定 */
-    }
-    
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        overflow-x: hidden; /* 強制的に横スクロールを禁止 */
-        -webkit-text-size-adjust: 100%; /* iPhoneで文字が勝手に小さくなるのを防ぐ */
-       font-size: 16px !important;
-    }
+    /* ベース設定 */
     body {
-       -webkit-text-size-adjust: 100%;
-       -moz-text-size-adjust: 100%;
-       -ms-text-size-adjust: 100%;
-       text-size-adjust: 100%;
         font-family: "Helvetica Neue", Arial, sans-serif;
-       font-size: 1rem;
         line-height: 1.6;
         color: #333;
         margin-left: 3%;
@@ -32,19 +16,19 @@
     }
 
     /* 目次エリア（右側フローティング・格納式） */
-/*    #toc-container {
+    #toc-container {
         position: fixed;
         top: 0;
-        right: -260px;
+        right: -260px; /* ★通常は画面外に隠す（幅300pxのうち40pxだけ見せる） */
         width: 300px;
         height: 100vh;
         background-color: #f4f4f4;
         box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-        transition: right 0.3s ease;
+        transition: right 0.3s ease; /* ★なめらかに動く設定 */
         z-index: 1000;
-        display: flex;
-    } 
-*/
+        display: flex; /* タブと中身を横並び */
+    }
+
     /* カーソルが乗った時に飛び出す設定 */
     #toc-container:hover {
         right: 0; /* 画面内に出てくる */
@@ -137,7 +121,6 @@
     .options-vertical { margin: 10px 0; padding-left: 20px; }
     .options-horizontal {
         display: flex; flex-wrap: wrap; gap: 15px;
-        max-width: 100%; box-sizing: border-box;
         margin-top: 10px; font-weight: bold;
         background-color: #eee; padding: 10px; border-radius: 4px;
     }
@@ -145,17 +128,9 @@
 
     /* スマホ・極小画面対応 */
     @media (max-width: 600px) {
-        body {
-            margin: 0; /* マージンをリセット */
-            font-size: 16px; /* 明示的にベースサイズを指定 */
-        }
-        #main-content {
-            padding: 20px 15px; /* パディングをスマホ用に最適化 */
-            max-width: 100%;
-        }
-        #toc-container {
-            display: none;
-        }
+        #main-content { padding-right: 20px; }
+        /* スマホでも邪魔なら以下で目次を非表示にすることも可能 */
+        /* #toc-container { display: none; } */
     }
 </style>
 </head>
@@ -2451,6 +2426,7 @@
 
 </body>
 </html>
+
 
 
 
